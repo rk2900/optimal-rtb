@@ -50,7 +50,7 @@ def simulate_one_bidding_strategy_with_parameter(cases, ctrs, tcost, proportion,
         if cost > budget:
             break
         revenue = original_ecpc * clks - cost
-        roi = 1.0 * revenue / cost
+        roi = 1.0 * revenue / cost if cost > 0.0 else 0.0
     return str(proportion) + '\t' + str(clks) + '\t' + str(bids) + '\t' + \
         str(imps) + '\t' + str(budget) + '\t' + str(cost) + '\t' + algo + '\t' + str(para) \
         + '\t' + str(revenue) + '\t' + str(roi)
