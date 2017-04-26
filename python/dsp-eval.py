@@ -123,8 +123,11 @@ def simulateABiddingStategyWithParameter(cases, tcost, proportion, algo, para):
             cost += case[3]
         if cost > budget:
             break
+    revenue = tecpc * clks - cost
+    roi = revenue / cost
     return str(proportion) + '\t' + str(clks) + '\t' + str(cnvs) + '\t' + str(bids) + '\t' + \
-            str(imps) + '\t' + str(budget) + '\t' + str(cost) + '\t' + algo + '\t'+ str(para)
+            str(imps) + '\t' + str(budget) + '\t' + str(cost) + '\t' + algo + '\t'+ str(para) + '\t' + \
+            str(revenue) + '\t' + str(roi)
 
 def simulateABiddingStrategy(cases, tcost, proportion, algo, writer):
     paras = algoParas[algo]
