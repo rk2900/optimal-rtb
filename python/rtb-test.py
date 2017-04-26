@@ -49,8 +49,11 @@ def simulate_one_bidding_strategy_with_parameter(cases, ctrs, tcost, proportion,
             cost += case[1]
         if cost > budget:
             break
+        revenue = original_ecpc * clks - cost
+        roi = 1.0 * revenue / cost
     return str(proportion) + '\t' + str(clks) + '\t' + str(bids) + '\t' + \
-        str(imps) + '\t' + str(budget) + '\t' + str(cost) + '\t' + algo + '\t' + str(para)
+        str(imps) + '\t' + str(budget) + '\t' + str(cost) + '\t' + algo + '\t' + str(para) \
+        + '\t' + str(revenue) + '\t' + str(roi)
 
 def simulate_one_bidding_strategy(cases, ctrs, tcost, proportion, algo, writer):
     paras = algo_paras[algo]
@@ -105,7 +108,7 @@ for line in fi:
 fi.close()
 
 # parameters setting for each bidding strategy
-budget_proportions = [64, 16] # , 32, 8]
+budget_proportions = [64, 16, 32, 8]
 const_paras = range(2, 20, 2) + range(20, 100, 5) + range(100, 301, 10)
 rand_paras = range(2, 20, 2) + range(20, 100, 5) + range(100, 501, 10)
 mcpc_paras = [1]
