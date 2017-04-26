@@ -33,8 +33,8 @@ if len(sys.argv) < 3:
     print 'Usage: train.yzx.txt test.yzx.txt'
     exit(-1)
 
-if not os.path.exists(sys.argv[2] + '.lr.weight'):
-    print "Weight not exists. " + sys.argv[2] + '.lr.weight'
+if not os.path.exists(sys.argv[1] + '.lr.weight'):
+    print "Weight not exists. " + sys.argv[1] + '.lr.weight'
     for round in range(0, trainRounds):
         # train for this round
         fi = open(sys.argv[1], 'r')
