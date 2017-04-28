@@ -46,7 +46,7 @@ def bidding_rand(upper):
     return int(random.random() * upper)
 
 def bidding_mcpc(ecpc, pctr):
-    return int(ecpc * pctr)
+    return int(ecpc * pctr * 1000)
 
 def bidding_lin(pctr, base_ctr, base_bid):
     return int(pctr * base_bid / base_ctr)
@@ -135,7 +135,7 @@ for line in fi:
     original_ctr += click
     original_ecpc += cost
 fi.close()
-original_ecpc /= original_ctr
+original_ecpc = original_ecpc / original_ctr / 1000
 original_ctr /= imp_num
 
 # read in test data
