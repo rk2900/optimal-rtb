@@ -5,6 +5,40 @@ import math
 
 random.seed(10)
 
+##################################################
+
+dsp_l = 42 # 48 # ["3358", "3386", "3427", "3476"] : 42
+
+cam_l = {"1458": 34, "2259": 50, "2261": 47, "2821": 47, "2997": 28,
+         "3358": 51, "3386": 39, "3427": 42, "3476": 41}
+
+bid_algorithms = ["const", "rand", "truth", "lin", "ortb", "sam1", "sam2"]
+volume = 300000
+budget_proportions = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024] #, 2048, 4096, 8192, 16384] #[2, 4, 8, 16, 32, 64, 128, 256, 512, 1024] # 16, 64, 256]
+algo_paras = {
+    "const": range(5, 300, 18),
+    "rand": range(5, 400, 24),
+    "truth": [1],
+    "lin": range(5, 150, 5),
+    "ortb": [1 * t for t in range(20, 1400, 30)],
+    "sam1": range(5, 150, 4),
+    "sam2": [0.1 * t for t in range(1, 100, 2)],
+    }
+
+algo_one_para = {
+    "const": 100,
+    "rand": 100,
+    "truth": [1],
+    "lin": 50,
+    "ortb": 800,
+    "sam1": 100,
+    "sam2": 5,
+    }
+
+##################################################
+
+
+
 def bidding_const(bid):
     return bid
 
@@ -16,6 +50,9 @@ def bidding_mcpc(ecpc, pctr):
 
 def bidding_lin(pctr, base_ctr, base_bid):
     return int(pctr * base_bid / base_ctr)
+
+def bidding_ortb(pctr, base_ctr, dsp_l, para):
+    return int(math.sqrt(pctr * dsp_l * para / base_ctr + dsp_l * dsp_l) - dsp_l)
 
 def win_auction(case, bid):
     return bid > case[1]  # bid > winning price
@@ -38,6 +75,8 @@ def simulate_one_bidding_strategy_with_parameter(cases, ctrs, tcost, proportion,
             bid = bidding_mcpc(original_ecpc, pctr)
         elif algo == "lin":
             bid = bidding_lin(pctr, original_ctr, para)
+        elif algo == "ortb":
+            bid = bidding_ortb(pctr, original_ctr, dsp_l, para)
         else:
             print 'wrong bidding strategy name'
             sys.exit(-1)
@@ -113,15 +152,16 @@ const_paras = range(2, 20, 2) + range(20, 100, 5) + range(100, 301, 10)
 rand_paras = range(2, 20, 2) + range(20, 100, 5) + range(100, 501, 10)
 mcpc_paras = [1]
 lin_paras = range(2, 20, 2) + range(20, 100, 5) + range(100, 400, 10) + range(400, 800, 50)
+ortb_paras = [1 * t for t in range(20, 1400, 30)]
 
-algo_paras = {"const":const_paras, "rand":rand_paras, "mcpc":mcpc_paras, "lin":lin_paras}
+algo_paras = {"const":const_paras, "rand":rand_paras, "mcpc":mcpc_paras, "lin":lin_paras, "ortb":ortb_paras}
 
 # initalisation finished
 # rock!
 
 fo = open(sys.argv[4], 'w')  # rtb.results.txt
 #header = "proportion\tclicks\tbids\timpressions\tbudget\tspend\tstrategy\tparameter"
-header = "prop\tclks\tbids\timps\tbudget\tspend\talgo\tpara"
+header = "prop\tclks\tbids\timps\tbudget\tspend\talgo\tpara\trevenue\troi"
 fo.write(header + "\n")
 print header
 for proportion in budget_proportions:
