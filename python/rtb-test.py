@@ -92,7 +92,7 @@ def simulate_one_bidding_strategy_with_parameter(cases, ctrs, tcost, proportion,
         roi = 1.0 * revenue / cost if cost > 0.0 else 0.0
     return str(proportion) + '\t' + str(clks) + '\t' + str(bids) + '\t' + \
         str(imps) + '\t' + str(budget) + '\t' + str(cost) + '\t' + algo + '\t' + str(para) \
-        + '\t' + str(revenue) + '\t' + str(roi)
+        + '\t' + str(revenue) + '\t' + str(roi) + '\t' + str(camp_id)
 
 def simulate_one_bidding_strategy(cases, ctrs, tcost, proportion, algo, writer):
     paras = algo_paras[algo]
@@ -111,6 +111,14 @@ pctrs = []          # pCTR from logistic regression prediciton
 total_cost = 0      # total original cost during the test data
 original_ecpc = 0.  # original eCPC from train data
 original_ctr = 0.   # original ctr from train data
+
+# read out campaign id
+args = sys.argv[1].split('/')
+camp_id = args[-2]
+#print camp_id
+dsp_l = cam_l[camp_id]
+print "dsp_l: ", dsp_l
+#exit(0)
 
 # read in train data for original_ecpc and original_ctr
 fi = open(sys.argv[1], 'r') # train.yzx.txt
@@ -147,7 +155,7 @@ for line in fi:
 fi.close()
 
 # parameters setting for each bidding strategy
-budget_proportions = [64, 16, 32, 8]
+budget_proportions = [64, 16, 32, 8, 4, 2, 1]
 const_paras = range(2, 20, 2) + range(20, 100, 5) + range(100, 301, 10)
 rand_paras = range(2, 20, 2) + range(20, 100, 5) + range(100, 501, 10)
 mcpc_paras = [1]
@@ -161,7 +169,7 @@ algo_paras = {"const":const_paras, "rand":rand_paras, "mcpc":mcpc_paras, "lin":l
 
 fo = open(sys.argv[4], 'w')  # rtb.results.txt
 #header = "proportion\tclicks\tbids\timpressions\tbudget\tspend\tstrategy\tparameter"
-header = "prop\tclks\tbids\timps\tbudget\tspend\talgo\tpara\trevenue\troi"
+header = "prop\tclks\tbids\timps\tbudget\tspend\talgo\tpara\trevenue\troi\tcampaign"
 fo.write(header + "\n")
 print header
 for proportion in budget_proportions:
