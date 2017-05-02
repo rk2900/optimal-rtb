@@ -109,7 +109,7 @@ if len(sys.argv) < 5:
 clicks_prices = []  # clk and price
 pctrs = []          # pCTR from logistic regression prediciton
 total_cost = 0      # total original cost during the test data
-original_ecpc = 0.  # original eCPC from train data
+original_ecpc = 0  # original eCPC from train data
 original_ctr = 0.   # original ctr from train data
 
 # read out campaign id
@@ -135,7 +135,7 @@ for line in fi:
     original_ctr += click
     original_ecpc += cost
 fi.close()
-original_ecpc /= original_ctr
+original_ecpc /= original_ctr; original_ecpc = int(original_ecpc)
 original_ctr /= imp_num
 
 # read in test data
